@@ -14,7 +14,7 @@ app.use(cors());
 // untuk online
 // mongodb://unilak:unilak1@ds211613.mlab.com:11613
 mongoose.connect(
-  "mongodb://127.0.0.1:27017/devchallange-unilak",
+  "mongodb://unilak:unilak1@ds211613.mlab.com:11613/devchallange-unilak",
   {
     useCreateIndex: true,
     useNewUrlParser: true
