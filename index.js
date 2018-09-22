@@ -9,9 +9,12 @@ const app = express();
 
 app.use(cors());
 
-// untuk statik import
+// untuk localee import
+// mongodb://127.0.0.1:27017//
+// untuk online
+// mongodb://unilak:unilak1@ds211613.mlab.com:11613
 mongoose.connect(
-  "mongodb://unilak:unilak1@ds211613.mlab.com:11613/devchallange-unilak",
+  "mongodb://127.0.0.1:27017/devchallange-unilak",
   {
     useCreateIndex: true,
     useNewUrlParser: true
