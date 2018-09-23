@@ -116,7 +116,7 @@ const RootQuery = new GraphQLObjectType({
     events : {
       type: new GraphQLList(EventType),
       resolve(parent, args){
-        return events.find({})
+        return events.find({}).sort( { date: 1 } )
       }
     },
     event : {

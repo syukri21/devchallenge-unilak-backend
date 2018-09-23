@@ -16,7 +16,7 @@ const projectSchema = new Schema(
     status: String,
     rating: Number,
     description: String,
-    startdate: String,
+    stardate: String,
     enddate: String,
     uid: {
       type: Array,
