@@ -1,6 +1,7 @@
 import project from "../models/project";
 import user from "../models/user";
-
+import events from "../models/events"
+import GraphQLDate from "graphql-date"
 import {
   GraphQLObjectType,
   GraphQLString,
@@ -10,6 +11,28 @@ import {
   GraphQLList,
   graphql
 } from "graphql";
+
+
+
+const EventType = new GraphQLObjectType({
+  name: "event",
+  fields : () => ({
+    id :  {type: GraphQLID},
+    eventid : {type: GraphQLString},
+    date : {type: GraphQLDate},
+    description: {type: GraphQLString},
+    location: {type: GraphQLString},
+    projectid : {
+      type: new GraphQLList(ProjectType),
+      resolve(parent, args){
+        return project.find({
+            project: {$in: parent.projectid}
+        })
+      },
+    },
+  })
+})
+
 
 const ProjectType = new GraphQLObjectType({
   name: "project",
@@ -88,6 +111,19 @@ const RootQuery = new GraphQLObjectType({
       args: { project: { type: GraphQLString } },
       resolve(parent, args) {
         return project.findOne({ project: args.project });
+      }
+    },
+    events : {
+      type: new GraphQLList(EventType),
+      resolve(parent, args){
+        return events.find({})
+      }
+    },
+    event : {
+      type: EventType,
+      args : { event: {type: GraphQLString}  },
+      resolve(parent, args ){
+        return events.findOne({eventid: args.event})
       }
     }
   }
@@ -222,6 +258,30 @@ const Mutation = new GraphQLObjectType({
           },
           { upsert: true }
         );
+      }
+    },
+
+    addEvent : {
+      type: EventType,
+      args: {
+        eventid: {type: GraphQLString},
+        date: {type: GraphQLDate},
+        description: {type: GraphQLString},
+        location: {type: GraphQLString},
+        projectid: {
+          type : new GraphQLList(GraphQLString),
+        }
+      },
+      resolve(parent, args){
+        let evnts = new events({
+          eventid: args.eventid,
+          date: args.date,
+          description: args.description,
+          location:args.location,
+          projectid: args.projectid,
+        })
+
+        return evnts.save();
       }
     }
   }
